@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Play, ArrowRight, Star, Users, BookOpen } from 'lucide-react';
+import { Play, ArrowRight, Star, Zap, Brain, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -21,66 +21,77 @@ export const HeroSection = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-left"
           >
-            {/* Badge */}
+            {/* Urgency Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-6"
             >
-              <Star className="w-4 h-4 text-primary fill-primary" />
-              <span className="text-sm font-medium text-primary">+10.000 alunos transformados</span>
+              <Zap className="w-4 h-4 text-red-500 animate-pulse" />
+              <span className="text-sm font-medium text-red-400">Método Exclusivo • Vagas Limitadas</span>
             </motion.div>
 
             <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight mb-6">
-              Domine novas{' '}
-              <span className="text-gradient">habilidades</span>{' '}
-              e acelere sua carreira
+              Crie Agentes de IA com{' '}
+              <span className="text-gradient">DNA Autoral</span>{' '}
+              e Elimine Alucinações
             </h1>
 
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
-              Cursos online de alta qualidade com certificação, suporte especializado 
-              e acesso vitalício. Aprenda no seu ritmo, de qualquer lugar.
+            <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-xl mx-auto lg:mx-0">
+              Descubra o <strong className="text-primary">Método DEL</strong> (Decomposição de Estrutura de Linguagem) 
+              e aprenda a criar SuperAgentes que escrevem com a sua identidade, coerência e precisão absoluta.
             </p>
+
+            {/* Pain Points */}
+            <div className="bg-card/50 border border-border/50 rounded-xl p-4 mb-8 max-w-xl mx-auto lg:mx-0">
+              <p className="text-sm text-muted-foreground italic">
+                "Cansado de IAs que dão respostas genéricas? Frustrado com alucinações que prejudicam sua marca? 
+                Está tentando escalar soluções sem direção?"
+              </p>
+              <p className="text-sm text-primary font-semibold mt-2">
+                ✓ O Método DEL resolve isso de uma vez por todas.
+              </p>
+            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-              <Link to="/cursos">
-                <Button variant="hero" size="xl" className="w-full sm:w-auto">
-                  Ver Cursos
+              <a href="https://hotmart.com/pt-br/marketplace/produtos/o-codigo-invisivel-dos-superagentes-de-inteligencia-artificial/O101044688E" target="_blank" rel="noopener noreferrer">
+                <Button variant="hero" size="xl" className="w-full sm:w-auto animate-pulse-glow">
+                  Quero Dominar o Método DEL
                   <ArrowRight className="w-5 h-5" />
                 </Button>
-              </Link>
-              <Link to="/#video">
+              </a>
+              <a href="#video">
                 <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
                   <Play className="w-5 h-5" />
-                  Assistir Demo
+                  Ver Apresentação
                 </Button>
-              </Link>
+              </a>
             </div>
 
-            {/* Stats */}
+            {/* Trust Stats */}
             <div className="grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start gap-2 text-primary mb-1">
-                  <Users className="w-5 h-5" />
-                  <span className="font-heading font-bold text-2xl">10k+</span>
+                  <Brain className="w-5 h-5" />
+                  <span className="font-heading font-bold text-2xl">100%</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Alunos</p>
+                <p className="text-sm text-muted-foreground">Prático</p>
               </div>
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start gap-2 text-primary mb-1">
-                  <BookOpen className="w-5 h-5" />
-                  <span className="font-heading font-bold text-2xl">50+</span>
+                  <ShieldCheck className="w-5 h-5" />
+                  <span className="font-heading font-bold text-2xl">7 dias</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Cursos</p>
+                <p className="text-sm text-muted-foreground">Garantia</p>
               </div>
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start gap-2 text-primary mb-1">
                   <Star className="w-5 h-5 fill-primary" />
-                  <span className="font-heading font-bold text-2xl">4.9</span>
+                  <span className="font-heading font-bold text-2xl">R$14</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Avaliação</p>
+                <p className="text-sm text-muted-foreground">Investimento</p>
               </div>
             </div>
           </motion.div>
@@ -91,6 +102,7 @@ export const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative"
+            id="video"
           >
             <div className="relative card-glass rounded-2xl p-6 card-hover">
               {/* Video Thumbnail */}
@@ -101,14 +113,14 @@ export const HeroSection = () => {
                     <Play className="w-8 h-8 text-primary-foreground ml-1 group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
-                {/* Mock Video Thumbnail Content */}
+                {/* Course Title Overlay */}
                 <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Star className="w-5 h-5 text-primary fill-primary" />
+                    <Brain className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Curso em Destaque</p>
-                    <p className="text-xs text-muted-foreground">Marketing Digital Completo</p>
+                    <p className="text-sm font-semibold text-foreground">O Código Invisível</p>
+                    <p className="text-xs text-muted-foreground">SuperAgentes de IA</p>
                   </div>
                 </div>
               </div>
@@ -116,16 +128,16 @@ export const HeroSection = () => {
               {/* Course Info */}
               <div className="mt-4 grid grid-cols-3 gap-4">
                 <div className="text-center p-3 rounded-lg bg-secondary/50">
-                  <p className="text-xs text-muted-foreground">Módulos</p>
-                  <p className="font-heading font-bold text-primary">12</p>
+                  <p className="text-xs text-muted-foreground">Método</p>
+                  <p className="font-heading font-bold text-primary">DEL</p>
                 </div>
                 <div className="text-center p-3 rounded-lg bg-secondary/50">
-                  <p className="text-xs text-muted-foreground">Horas</p>
-                  <p className="font-heading font-bold text-primary">48h</p>
+                  <p className="text-xs text-muted-foreground">Zero</p>
+                  <p className="font-heading font-bold text-primary">Código</p>
                 </div>
                 <div className="text-center p-3 rounded-lg bg-secondary/50">
-                  <p className="text-xs text-muted-foreground">Certificado</p>
-                  <p className="font-heading font-bold text-primary">Sim</p>
+                  <p className="text-xs text-muted-foreground">Acesso</p>
+                  <p className="font-heading font-bold text-primary">Imediato</p>
                 </div>
               </div>
             </div>
@@ -136,7 +148,20 @@ export const HeroSection = () => {
                 <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
                   <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
                 </div>
-                <span className="text-sm font-medium">247 online agora</span>
+                <span className="text-sm font-medium">Alunos online agora</span>
+              </div>
+            </div>
+
+            {/* Author Badge */}
+            <div className="absolute -bottom-4 -left-4 p-4 rounded-xl card-glass hidden lg:block">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="font-bold text-primary text-sm">JL</span>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">Jefferson Lobo</p>
+                  <p className="text-xs text-muted-foreground">Criador do Método DEL</p>
+                </div>
               </div>
             </div>
           </motion.div>
