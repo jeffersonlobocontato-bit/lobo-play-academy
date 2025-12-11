@@ -36,7 +36,7 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { signIn, signUp, user, isAdmin } = useAuth();
+  const { signIn, signUp, user, isAdmin, isAdminLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -44,14 +44,14 @@ export default function Auth() {
   const from = location.state?.from?.pathname || '/portal';
 
   useEffect(() => {
-    if (user) {
+    if (user && !isAdminLoading) {
       if (isAdmin) {
         navigate('/admin');
       } else {
         navigate(from);
       }
     }
-  }, [user, isAdmin, navigate, from]);
+  }, [user, isAdmin, isAdminLoading, navigate, from]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
