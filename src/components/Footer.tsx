@@ -1,23 +1,22 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Instagram, Youtube, Linkedin } from 'lucide-react';
+import { Mail, Instagram, Youtube, Linkedin, Brain } from 'lucide-react';
 import LoboPlayLogo from '@/components/LoboPlayLogo';
 
 const footerLinks = {
   platform: [
-    { label: 'Cursos', href: '/cursos' },
-    { label: 'Como Funciona', href: '/#como-funciona' },
+    { label: 'Curso de IA', href: '/#cursos' },
+    { label: 'Método DEL', href: '/#sobre' },
     { label: 'Depoimentos', href: '/#depoimentos' },
-    { label: 'Blog', href: '/blog' },
+    { label: 'E-book Grátis', href: '/#lead-magnet' },
   ],
   support: [
-    { label: 'Central de Ajuda', href: '/ajuda' },
     { label: 'Contato', href: '/#contato' },
-    { label: 'FAQ', href: '/faq' },
+    { label: 'WhatsApp', href: 'https://wa.me/5511999999999' },
+    { label: 'FAQ', href: '/#faq' },
   ],
   legal: [
     { label: 'Termos de Uso', href: '/termos' },
     { label: 'Política de Privacidade', href: '/privacidade' },
-    { label: 'Política de Cookies', href: '/cookies' },
   ],
 };
 
@@ -36,22 +35,18 @@ export const Footer = () => {
           <div className="lg:col-span-2 space-y-6">
             <LoboPlayLogo className="h-10" />
             <p className="text-muted-foreground max-w-sm">
-              Transforme sua carreira com cursos online de alta qualidade. 
-              Aprenda com os melhores profissionais do mercado.
+              Cursos de Inteligência Artificial com foco em autenticidade. 
+              Aprenda a criar agentes de IA com DNA autoral usando o exclusivo Método DEL.
             </p>
             <div className="space-y-3">
               <a href="mailto:contato@loboplay.com" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
                 <Mail className="w-5 h-5 text-primary" />
                 contato@loboplay.com
               </a>
-              <a href="tel:+5511999999999" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
-                <Phone className="w-5 h-5 text-primary" />
-                (11) 99999-9999
-              </a>
-              <p className="flex items-center gap-3 text-muted-foreground">
-                <MapPin className="w-5 h-5 text-primary" />
-                São Paulo, SP - Brasil
-              </p>
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <Brain className="w-5 h-5 text-primary" />
+                Especialista em IA com DNA Autoral
+              </div>
             </div>
           </div>
 
@@ -78,12 +73,23 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
-                  <Link 
-                    to={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.href.startsWith('http') ? (
+                    <a 
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link 
+                      to={link.href}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -110,7 +116,8 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} LoboPlay. Todos os direitos reservados.
+            © {new Date().getFullYear()} LoboPlay. Todos os direitos reservados. 
+            <span className="text-primary ml-2">Método DEL por Jefferson Lobo</span>
           </p>
           
           {/* Social Links */}

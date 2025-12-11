@@ -1,86 +1,21 @@
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, BookOpen, Star, Users, ArrowRight } from 'lucide-react';
+import { Clock, BookOpen, Star, Users, ArrowRight, ShieldCheck, Zap, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  instructor: string;
-  price: number;
-  originalPrice?: number;
-  duration: string;
-  modules: number;
-  students: number;
-  rating: number;
-  image: string;
-  category: string;
-  featured?: boolean;
-}
-
-const courses: Course[] = [
-  {
-    id: '1',
-    title: 'Marketing Digital Completo',
-    description: 'Domine todas as estratégias de marketing digital: SEO, Ads, Social Media e muito mais.',
-    instructor: 'Carlos Silva',
-    price: 297,
-    originalPrice: 497,
-    duration: '48h',
-    modules: 12,
-    students: 3420,
-    rating: 4.9,
-    image: '',
-    category: 'Marketing',
-    featured: true,
-  },
-  {
-    id: '2',
-    title: 'Desenvolvimento Web Full Stack',
-    description: 'Aprenda a criar aplicações web completas com React, Node.js e banco de dados.',
-    instructor: 'Ana Santos',
-    price: 397,
-    originalPrice: 597,
-    duration: '64h',
-    modules: 16,
-    students: 2180,
-    rating: 4.8,
-    image: '',
-    category: 'Tecnologia',
-  },
-  {
-    id: '3',
-    title: 'Design UX/UI Profissional',
-    description: 'Crie interfaces incríveis e experiências de usuário memoráveis.',
-    instructor: 'Pedro Costa',
-    price: 247,
-    originalPrice: 397,
-    duration: '36h',
-    modules: 10,
-    students: 1850,
-    rating: 4.9,
-    image: '',
-    category: 'Design',
-  },
+const courseModules = [
+  'Fundamentos do Método DEL',
+  'Análise Sintática para IA',
+  'Extração Semântica Avançada',
+  'Mapeamento Lexical',
+  'Construção do DNA Autoral',
+  'Aplicação Prática em Agentes',
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6 },
-  },
-};
+const bonuses = [
+  { title: 'Templates de Prompts DEL', description: 'Modelos prontos para usar' },
+  { title: 'Comunidade Exclusiva', description: 'Acesso ao grupo de alunos' },
+  { title: 'Atualizações Vitalícias', description: 'Novos conteúdos sem custo extra' },
+];
 
 export const CoursesSection = () => {
   return (
@@ -92,128 +27,157 @@ export const CoursesSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Nossos Cursos</span>
+          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Curso Completo</span>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
-            Cursos que{' '}
-            <span className="text-gradient">transformam</span>{' '}
-            carreiras
+            O Código Invisível dos{' '}
+            <span className="text-gradient">SuperAgentes de IA</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Conheça nossos cursos mais populares e comece sua jornada de transformação hoje mesmo.
+            O guia prático definitivo para criar agentes de inteligência artificial 
+            que escrevem com DNA autoral e zero alucinações.
           </p>
         </motion.div>
 
-        {/* Courses Grid */}
+        {/* Course Card */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          {courses.map((course) => (
-            <motion.div
-              key={course.id}
-              variants={itemVariants}
-              className="group rounded-2xl bg-card border border-border/50 overflow-hidden card-hover"
-            >
-              {/* Image */}
-              <div className="relative aspect-video bg-lobo-navy-light overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-lobo-slate/30" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm flex items-center justify-center">
-                    <BookOpen className="w-8 h-8 text-foreground" />
-                  </div>
-                </div>
-                {course.featured && (
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-                      Destaque
-                    </span>
-                  </div>
-                )}
-                <div className="absolute top-4 right-4">
-                  <span className="px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-foreground text-xs font-medium">
-                    {course.category}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <h3 className="font-heading font-bold text-xl mb-2 group-hover:text-primary transition-colors line-clamp-1">
-                  {course.title}
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                  {course.description}
-                </p>
-
-                {/* Stats */}
-                <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {course.duration}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <BookOpen className="w-4 h-4" />
-                    {course.modules} módulos
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Users className="w-4 h-4" />
-                    {course.students.toLocaleString()}
-                  </div>
-                </div>
-
-                {/* Rating & Instructor */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-primary fill-primary" />
-                      <span className="font-semibold text-sm">{course.rating}</span>
-                    </div>
-                  </div>
-                  <span className="text-sm text-muted-foreground">por {course.instructor}</span>
-                </div>
-
-                {/* Price & CTA */}
-                <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                  <div>
-                    {course.originalPrice && (
-                      <span className="text-sm text-muted-foreground line-through">
-                        R$ {course.originalPrice}
-                      </span>
-                    )}
-                    <p className="font-heading font-bold text-2xl text-primary">
-                      R$ {course.price}
-                    </p>
-                  </div>
-                  <Link to={`/curso/${course.id}`}>
-                    <Button variant="hero" size="sm">
-                      Ver Curso
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-12"
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto"
         >
-          <Link to="/cursos">
-            <Button variant="outline" size="lg">
-              Ver Todos os Cursos
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </Link>
+          <div className="rounded-3xl bg-card border border-primary/30 overflow-hidden shadow-2xl">
+            {/* Header Banner */}
+            <div className="relative bg-gradient-to-r from-primary/20 via-lobo-navy to-lobo-slate/50 p-8 text-center">
+              <div className="absolute top-4 right-4">
+                <span className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-bold animate-pulse">
+                  🔥 OFERTA ESPECIAL
+                </span>
+              </div>
+              <h3 className="font-heading text-2xl md:text-3xl font-bold mb-2">
+                Método DEL Completo
+              </h3>
+              <p className="text-muted-foreground">Por Jefferson Lobo • +20 anos em Marketing e Comunicação</p>
+            </div>
+
+            <div className="p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Left - Modules */}
+                <div>
+                  <h4 className="font-heading font-bold text-lg mb-4 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-primary" />
+                    O que você vai aprender:
+                  </h4>
+                  <ul className="space-y-3">
+                    {courseModules.map((module, index) => (
+                      <li key={index} className="flex items-center gap-3 text-muted-foreground">
+                        <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                          <span className="text-xs font-bold text-primary">{index + 1}</span>
+                        </div>
+                        {module}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Bonuses */}
+                  <h4 className="font-heading font-bold text-lg mt-8 mb-4 flex items-center gap-2">
+                    <Award className="w-5 h-5 text-primary" />
+                    Bônus Inclusos:
+                  </h4>
+                  <ul className="space-y-3">
+                    {bonuses.map((bonus, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <Zap className="w-5 h-5 text-primary mt-0.5" />
+                        <div>
+                          <p className="font-semibold text-sm">{bonus.title}</p>
+                          <p className="text-xs text-muted-foreground">{bonus.description}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Right - CTA */}
+                <div className="bg-secondary/30 rounded-2xl p-6 md:p-8">
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="text-center p-3 rounded-lg bg-background/50">
+                      <Clock className="w-5 h-5 text-primary mx-auto mb-1" />
+                      <p className="text-xs text-muted-foreground">Acesso</p>
+                      <p className="font-bold text-sm">Vitalício</p>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-background/50">
+                      <Users className="w-5 h-5 text-primary mx-auto mb-1" />
+                      <p className="text-xs text-muted-foreground">Para</p>
+                      <p className="font-bold text-sm">Todos</p>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-background/50">
+                      <Star className="w-5 h-5 text-primary mx-auto mb-1 fill-primary" />
+                      <p className="text-xs text-muted-foreground">Garantia</p>
+                      <p className="font-bold text-sm">7 Dias</p>
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className="text-center mb-6">
+                    <p className="text-sm text-muted-foreground line-through">De R$ 97,00</p>
+                    <p className="text-sm text-green-400 font-semibold">Por apenas:</p>
+                    <p className="font-heading text-5xl font-bold text-primary my-2">
+                      R$ 14<span className="text-2xl">,00</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground">Pagamento único • Acesso imediato</p>
+                  </div>
+
+                  {/* CTA Button */}
+                  <a 
+                    href="https://hotmart.com/pt-br/marketplace/produtos/o-codigo-invisivel-dos-superagentes-de-inteligencia-artificial/O101044688E" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="hero" size="xl" className="w-full mb-4">
+                      QUERO CRIAR SUPERAGENTES
+                      <ArrowRight className="w-5 h-5" />
+                    </Button>
+                  </a>
+
+                  {/* Guarantee */}
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                    <ShieldCheck className="w-5 h-5 text-green-500" />
+                    <span>Garantia incondicional de 7 dias</span>
+                  </div>
+
+                  {/* Trust Elements */}
+                  <div className="mt-6 pt-6 border-t border-border/50">
+                    <p className="text-xs text-center text-muted-foreground mb-3">
+                      Pagamento 100% seguro via:
+                    </p>
+                    <div className="flex justify-center gap-4 text-muted-foreground">
+                      <span className="text-xs">💳 Cartão</span>
+                      <span className="text-xs">📱 Pix</span>
+                      <span className="text-xs">📄 Boleto</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Target Audience */}
+              <div className="mt-8 pt-8 border-t border-border/50">
+                <h4 className="font-heading font-bold text-lg mb-4 text-center">Para quem é este curso?</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                  {['Comunicadores', 'Marketeiros', 'Estrategistas', 'Desenvolvedores'].map((audience) => (
+                    <div key={audience} className="p-4 rounded-xl bg-secondary/30">
+                      <p className="font-semibold text-sm">{audience}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-center text-muted-foreground text-sm mt-4">
+                  E qualquer pessoa interessada em aplicar IA com foco em autenticidade e comunicação efetiva.
+                </p>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

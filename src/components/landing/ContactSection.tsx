@@ -49,7 +49,7 @@ export const ContactSection = () => {
   };
 
   const whatsappNumber = '5511999999999';
-  const whatsappMessage = encodeURIComponent('Olá! Gostaria de saber mais sobre os cursos da LoboPlay.');
+  const whatsappMessage = encodeURIComponent('Olá! Gostaria de saber mais sobre o curso de Agentes de IA com o Método DEL.');
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
@@ -65,12 +65,12 @@ export const ContactSection = () => {
           >
             <span className="text-primary font-semibold text-sm uppercase tracking-wider">Fale Conosco</span>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
-              Tem alguma{' '}
-              <span className="text-gradient">dúvida?</span>
+              Dúvidas sobre o{' '}
+              <span className="text-gradient">Método DEL?</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8">
-              Nossa equipe está pronta para ajudar você. Entre em contato por 
-              formulário ou WhatsApp e responderemos o mais rápido possível.
+              Nossa equipe está pronta para ajudar você a dominar a criação de SuperAgentes de IA. 
+              Entre em contato por formulário ou WhatsApp.
             </p>
 
             {/* WhatsApp CTA */}
@@ -94,20 +94,24 @@ export const ContactSection = () => {
             </a>
 
             {/* FAQ Preview */}
-            <div className="mt-12 space-y-4">
+            <div id="faq" className="mt-12 space-y-4">
               <h3 className="font-heading font-semibold text-lg">Perguntas Frequentes</h3>
               {[
                 {
-                  q: 'Como funciona o acesso aos cursos?',
-                  a: 'Após a compra, você recebe acesso imediato e vitalício ao curso.',
+                  q: 'Preciso saber programar para aplicar o Método DEL?',
+                  a: 'Não! O método é 100% acessível, mesmo para quem não tem conhecimento técnico.',
                 },
                 {
-                  q: 'Posso parcelar o pagamento?',
-                  a: 'Sim! Parcelamos em até 12x no cartão de crédito.',
+                  q: 'Quanto tempo tenho para acessar o curso?',
+                  a: 'Acesso vitalício! Você pode assistir quando e quantas vezes quiser.',
                 },
                 {
-                  q: 'Os cursos têm certificado?',
-                  a: 'Sim, todos os cursos possuem certificado de conclusão.',
+                  q: 'E se eu não gostar do curso?',
+                  a: 'Garantia incondicional de 7 dias. Se não gostar, devolvemos 100% do valor.',
+                },
+                {
+                  q: 'O curso serve para qualquer tipo de agente de IA?',
+                  a: 'Sim! O Método DEL pode ser aplicado em qualquer projeto de IA que envolva linguagem.',
                 },
               ].map((faq, index) => (
                 <div key={index} className="p-4 rounded-lg bg-secondary/30 border border-border/50">
