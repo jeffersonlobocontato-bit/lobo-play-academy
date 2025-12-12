@@ -109,6 +109,11 @@ export const HeroSection = () => {
             <div className="relative card-glass rounded-2xl p-6 card-hover">
               {/* Video Thumbnail - 9:16 for Shorts */}
               <div className="relative aspect-[9/16] max-w-[280px] mx-auto rounded-xl overflow-hidden bg-lobo-navy-light">
+                <img 
+                  src="https://img.youtube.com/vi/Pmt9RuXhqiU/maxresdefault.jpg"
+                  alt="Vídeo do Método DEL"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <button 
