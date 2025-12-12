@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { Play, ArrowRight, Star, Zap, Brain, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import { VideoModal } from '@/components/VideoModal';
 
 export const HeroSection = () => {
+  const [videoOpen, setVideoOpen] = useState(false);
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-hero-pattern">
       {/* Background Gradient Orbs */}
@@ -105,11 +107,14 @@ export const HeroSection = () => {
             id="video"
           >
             <div className="relative card-glass rounded-2xl p-6 card-hover">
-              {/* Video Thumbnail */}
-              <div className="relative aspect-video rounded-xl overflow-hidden bg-lobo-navy-light">
+              {/* Video Thumbnail - 9:16 for Shorts */}
+              <div className="relative aspect-[9/16] max-w-[280px] mx-auto rounded-xl overflow-hidden bg-lobo-navy-light">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <button className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-lg btn-glow group">
+                  <button 
+                    onClick={() => setVideoOpen(true)}
+                    className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-lg btn-glow group cursor-pointer hover:scale-105 transition-transform"
+                  >
                     <Play className="w-8 h-8 text-primary-foreground ml-1 group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
@@ -167,6 +172,14 @@ export const HeroSection = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Video Modal */}
+      <VideoModal 
+        open={videoOpen} 
+        onOpenChange={setVideoOpen}
+        youtubeId="Pmt9RuXhqiU"
+        isShorts={true}
+      />
     </section>
   );
 };
