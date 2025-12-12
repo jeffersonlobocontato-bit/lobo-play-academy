@@ -56,22 +56,6 @@ export const HeroSection = () => {
               </p>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-              <a href="https://hotmart.com/pt-br/marketplace/produtos/o-codigo-invisivel-dos-superagentes-de-inteligencia-artificial/O101044688E" target="_blank" rel="noopener noreferrer">
-                <Button variant="hero" size="xl" className="w-full sm:w-auto animate-pulse-glow">
-                  Quero Dominar o Método DEL
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </a>
-              <a href="#video">
-                <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
-                  <Play className="w-5 h-5" />
-                  Ver Apresentação
-                </Button>
-              </a>
-            </div>
-
             {/* Trust Stats */}
             <div className="grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
               <div className="text-center lg:text-left">
@@ -178,6 +162,27 @@ export const HeroSection = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* CTA Buttons - Below the grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center mt-12"
+        >
+          <a href="https://hotmart.com/pt-br/marketplace/produtos/o-codigo-invisivel-dos-superagentes-de-inteligencia-artificial/O101044688E" target="_blank" rel="noopener noreferrer">
+            <Button variant="hero" size="xl" className="w-full sm:w-auto animate-pulse-glow">
+              Quero Dominar o Método DEL
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          </a>
+          <a href="#video">
+            <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
+              <Play className="w-5 h-5" />
+              Ver Apresentação
+            </Button>
+          </a>
+        </motion.div>
       </div>
 
       {/* Video Modal */}
