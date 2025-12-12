@@ -103,10 +103,22 @@ export const HeroSection = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative py-10 lg:py-12"
+            className="flex flex-col gap-4"
             id="video"
           >
-            <div className="relative card-glass rounded-2xl p-6 card-hover">
+            {/* Online Badge - Above Card */}
+            <div className="hidden lg:flex justify-end">
+              <div className="p-4 rounded-xl card-glass animate-float">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+                  </div>
+                  <span className="text-sm font-medium">Alunos online agora</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="card-glass rounded-2xl p-6 card-hover">
               {/* Video Thumbnail - 9:16 for Shorts */}
               <div className="relative aspect-[9/16] max-w-[280px] mx-auto rounded-xl overflow-hidden bg-lobo-navy-light">
                 <img 
@@ -150,27 +162,17 @@ export const HeroSection = () => {
                   <p className="font-heading font-bold text-primary">Imediato</p>
                 </div>
               </div>
-            </div>
 
-            {/* Floating Elements */}
-            <div className="absolute top-0 right-0 lg:-right-2 p-4 rounded-xl card-glass animate-float hidden lg:block">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                </div>
-                <span className="text-sm font-medium">Alunos online agora</span>
-              </div>
-            </div>
-
-            {/* Author Badge */}
-            <div className="absolute bottom-0 left-0 lg:-left-2 p-4 rounded-xl card-glass hidden lg:block">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                  <span className="font-bold text-primary text-sm">JL</span>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">Jefferson Lobo</p>
-                  <p className="text-xs text-muted-foreground">Criador do Método DEL</p>
+              {/* Author Badge - Inside Card */}
+              <div className="mt-4 p-4 rounded-xl bg-secondary/30 border border-border/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <span className="font-bold text-primary text-sm">JL</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">Jefferson Lobo</p>
+                    <p className="text-xs text-muted-foreground">Criador do Método DEL</p>
+                  </div>
                 </div>
               </div>
             </div>
