@@ -120,7 +120,7 @@ export const HeroSection = () => {
 
             <div className="card-glass rounded-2xl p-6 card-hover">
               {/* Video Thumbnail - 9:16 for Shorts */}
-              <div className="relative aspect-[9/16] max-w-[280px] mx-auto rounded-xl overflow-hidden bg-lobo-navy-light">
+              <div className="relative aspect-[9/16] max-w-[280px] max-h-[450px] mx-auto rounded-xl overflow-hidden bg-lobo-navy-light">
                 <img 
                   src="https://img.youtube.com/vi/Pmt9RuXhqiU/maxresdefault.jpg"
                   alt="Vídeo do Método DEL"
