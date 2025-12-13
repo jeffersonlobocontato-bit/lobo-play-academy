@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/accordion';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, BookOpen, Video, Trash2, Edit, GripVertical, Save, Loader2 } from 'lucide-react';
+import { Plus, BookOpen, Video, Trash2, Edit, GripVertical, Save, Loader2, AlertTriangle } from 'lucide-react';
 
 interface Lesson {
   id: string;
@@ -541,13 +541,23 @@ export default function Courses() {
                         {module.lessons.map((lesson, lessonIndex) => (
                           <div
                             key={lesson.id}
-                            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 group"
+                            onClick={() => openEditLessonDialog(lesson, module.id)}
+                            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 cursor-pointer hover:bg-muted transition-colors"
                           >
                             <div className="flex items-center gap-3">
-                              <Video className="h-4 w-4 text-muted-foreground" />
+                              {!lesson.video_url ? (
+                                <AlertTriangle className="h-4 w-4 text-amber-500" />
+                              ) : (
+                                <Video className="h-4 w-4 text-muted-foreground" />
+                              )}
                               <span>Aula {lessonIndex + 1}: {lesson.title}</span>
                               {lesson.is_free && (
                                 <Badge variant="secondary">Grátis</Badge>
+                              )}
+                              {!lesson.video_url && (
+                                <Badge variant="outline" className="text-amber-500 border-amber-500">
+                                  Sem vídeo
+                                </Badge>
                               )}
                             </div>
                             <div className="flex items-center gap-2">
@@ -557,16 +567,22 @@ export default function Courses() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={() => openEditLessonDialog(lesson, module.id)}
+                                className="h-8 w-8"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openEditLessonDialog(lesson, module.id);
+                                }}
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive"
-                                onClick={() => deleteLesson(lesson.id)}
+                                className="h-8 w-8 text-destructive hover:text-destructive"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteLesson(lesson.id);
+                                }}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
