@@ -60,7 +60,18 @@ export default function Courses() {
   const [saving, setSaving] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [isLessonDialogOpen, setIsLessonDialogOpen] = useState(false);
+  const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
+  const [editingLessonModuleId, setEditingLessonModuleId] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const [lessonFormData, setLessonFormData] = useState({
+    title: '',
+    description: '',
+    video_url: '',
+    duration_seconds: 0,
+    is_free: false,
+  });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -250,27 +261,100 @@ export default function Courses() {
     }
   };
 
-  const addLesson = async (moduleId: string) => {
+  const addLesson = (moduleId: string) => {
+    setEditingLesson(null);
+    setEditingLessonModuleId(moduleId);
+    setLessonFormData({
+      title: '',
+      description: '',
+      video_url: '',
+      duration_seconds: 0,
+      is_free: false,
+    });
+    setIsLessonDialogOpen(true);
+  };
+
+  const openEditLessonDialog = (lesson: Lesson, moduleId: string) => {
+    setEditingLesson(lesson);
+    setEditingLessonModuleId(moduleId);
+    setLessonFormData({
+      title: lesson.title,
+      description: lesson.description || '',
+      video_url: lesson.video_url || '',
+      duration_seconds: lesson.duration_seconds,
+      is_free: lesson.is_free,
+    });
+    setIsLessonDialogOpen(true);
+  };
+
+  const saveLesson = async () => {
+    if (!editingLessonModuleId) return;
+    setSaving(true);
     try {
-      const module = courses
-        .flatMap((c) => c.modules)
-        .find((m) => m.id === moduleId);
-      const orderIndex = module?.lessons.length || 0;
+      if (editingLesson) {
+        const { error } = await supabase
+          .from('lessons')
+          .update({
+            title: lessonFormData.title,
+            description: lessonFormData.description || null,
+            video_url: lessonFormData.video_url || null,
+            duration_seconds: lessonFormData.duration_seconds,
+            is_free: lessonFormData.is_free,
+          })
+          .eq('id', editingLesson.id);
 
-      const { error } = await supabase
-        .from('lessons')
-        .insert({
-          module_id: moduleId,
-          title: 'Nova Aula',
-          order_index: orderIndex,
-        });
+        if (error) throw error;
+        toast({ title: 'Aula atualizada!' });
+      } else {
+        const module = courses
+          .flatMap((c) => c.modules)
+          .find((m) => m.id === editingLessonModuleId);
+        const orderIndex = module?.lessons.length || 0;
 
-      if (error) throw error;
+        const { error } = await supabase
+          .from('lessons')
+          .insert({
+            module_id: editingLessonModuleId,
+            title: lessonFormData.title,
+            description: lessonFormData.description || null,
+            video_url: lessonFormData.video_url || null,
+            duration_seconds: lessonFormData.duration_seconds,
+            is_free: lessonFormData.is_free,
+            order_index: orderIndex,
+          });
+
+        if (error) throw error;
+        toast({ title: 'Aula criada!' });
+      }
+
+      setIsLessonDialogOpen(false);
+      setEditingLesson(null);
+      setEditingLessonModuleId(null);
       fetchCourses();
-      toast({ title: 'Aula adicionada!' });
     } catch (error: any) {
       toast({
-        title: 'Erro ao adicionar aula',
+        title: 'Erro ao salvar aula',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const deleteLesson = async (lessonId: string) => {
+    try {
+      const { error } = await supabase
+        .from('lessons')
+        .delete()
+        .eq('id', lessonId);
+
+      if (error) throw error;
+      toast({ title: 'Aula removida!' });
+      fetchCourses();
+    } catch (error: any) {
+      toast({
+        title: 'Erro ao remover aula',
         description: error.message,
         variant: 'destructive',
       });
@@ -457,7 +541,7 @@ export default function Courses() {
                         {module.lessons.map((lesson, lessonIndex) => (
                           <div
                             key={lesson.id}
-                            className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
+                            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 group"
                           >
                             <div className="flex items-center gap-3">
                               <Video className="h-4 w-4 text-muted-foreground" />
@@ -466,9 +550,27 @@ export default function Courses() {
                                 <Badge variant="secondary">Grátis</Badge>
                               )}
                             </div>
-                            <span className="text-sm text-muted-foreground">
-                              {formatDuration(lesson.duration_seconds)}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-muted-foreground">
+                                {formatDuration(lesson.duration_seconds)}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                                onClick={() => openEditLessonDialog(lesson, module.id)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive"
+                                onClick={() => deleteLesson(lesson.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         ))}
                         <Button
@@ -515,6 +617,91 @@ export default function Courses() {
           </Card>
         )}
       </div>
+
+      {/* Lesson Dialog */}
+      <Dialog open={isLessonDialogOpen} onOpenChange={(open) => {
+        setIsLessonDialogOpen(open);
+        if (!open) {
+          setEditingLesson(null);
+          setEditingLessonModuleId(null);
+        }
+      }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editingLesson ? 'Editar Aula' : 'Nova Aula'}</DialogTitle>
+            <DialogDescription>
+              Preencha as informações da aula
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="lesson-title">Título da Aula</Label>
+              <Input
+                id="lesson-title"
+                value={lessonFormData.title}
+                onChange={(e) => setLessonFormData({ ...lessonFormData, title: e.target.value })}
+                placeholder="Introdução ao módulo"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="lesson-description">Descrição</Label>
+              <Textarea
+                id="lesson-description"
+                value={lessonFormData.description}
+                onChange={(e) => setLessonFormData({ ...lessonFormData, description: e.target.value })}
+                placeholder="Descrição da aula..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="lesson-video">URL do Vídeo</Label>
+              <Input
+                id="lesson-video"
+                value={lessonFormData.video_url}
+                onChange={(e) => setLessonFormData({ ...lessonFormData, video_url: e.target.value })}
+                placeholder="https://youtube.com/watch?v=... ou https://vimeo.com/..."
+              />
+              <p className="text-xs text-muted-foreground">
+                Suporta YouTube, Vimeo ou link direto de vídeo (MP4, WebM)
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="lesson-duration">Duração (minutos)</Label>
+                <Input
+                  id="lesson-duration"
+                  type="number"
+                  value={Math.floor(lessonFormData.duration_seconds / 60)}
+                  onChange={(e) => setLessonFormData({ ...lessonFormData, duration_seconds: parseInt(e.target.value) * 60 || 0 })}
+                />
+              </div>
+
+              <div className="flex items-center space-x-2 pt-8">
+                <Switch
+                  id="lesson-free"
+                  checked={lessonFormData.is_free}
+                  onCheckedChange={(checked) => setLessonFormData({ ...lessonFormData, is_free: checked })}
+                />
+                <Label htmlFor="lesson-free">Aula gratuita</Label>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsLessonDialogOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={saveLesson} disabled={saving || !lessonFormData.title} className="btn-glow">
+              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+              {editingLesson ? 'Salvar Alterações' : 'Criar Aula'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
