@@ -159,6 +159,83 @@ export type Database = {
           },
         ]
       }
+      hotmart_products: {
+        Row: {
+          course_id: string | null
+          created_at: string
+          hotmart_product_id: string
+          id: string
+          product_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          course_id?: string | null
+          created_at?: string
+          hotmart_product_id: string
+          id?: string
+          product_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string | null
+          created_at?: string
+          hotmart_product_id?: string
+          id?: string
+          product_name?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hotmart_products_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hotmart_transactions: {
+        Row: {
+          buyer_email: string
+          buyer_name: string | null
+          created_at: string
+          error_message: string | null
+          event_type: string
+          hotmart_product_id: string
+          hotmart_transaction_id: string | null
+          id: string
+          processed: boolean | null
+          raw_payload: Json | null
+          status: string
+        }
+        Insert: {
+          buyer_email: string
+          buyer_name?: string | null
+          created_at?: string
+          error_message?: string | null
+          event_type: string
+          hotmart_product_id: string
+          hotmart_transaction_id?: string | null
+          id?: string
+          processed?: boolean | null
+          raw_payload?: Json | null
+          status: string
+        }
+        Update: {
+          buyer_email?: string
+          buyer_name?: string | null
+          created_at?: string
+          error_message?: string | null
+          event_type?: string
+          hotmart_product_id?: string
+          hotmart_transaction_id?: string | null
+          id?: string
+          processed?: boolean | null
+          raw_payload?: Json | null
+          status?: string
+        }
+        Relationships: []
+      }
       landing_content: {
         Row: {
           content: Json
