@@ -9,7 +9,8 @@ import {
   Settings,
   LogOut,
   BookOpen,
-  ChevronRight
+  ChevronRight,
+  Package
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -36,6 +37,7 @@ const menuItems = [
   { title: 'Alunos', url: '/admin/students', icon: Users },
   { title: 'Conteúdo', url: '/admin/content', icon: FileText },
   { title: 'Cursos', url: '/admin/courses', icon: BookOpen },
+  { title: 'Produtos Hotmart', url: '/admin/hotmart-products', icon: Package },
   { title: 'Leads', url: '/admin/leads', icon: Mail },
   { title: 'Automações', url: '/admin/automations', icon: Zap },
   { title: 'Retenção', url: '/admin/retention', icon: Target },

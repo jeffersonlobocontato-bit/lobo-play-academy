@@ -13,6 +13,12 @@ import Auth from "./pages/Auth";
 import Portal from "./pages/Portal";
 import NotFound from "./pages/NotFound";
 
+// Portal pages
+import CoursePage from "./pages/portal/CoursePage";
+import LessonPage from "./pages/portal/LessonPage";
+import Certificates from "./pages/portal/Certificates";
+import Profile from "./pages/portal/Profile";
+
 // Admin pages
 import AdminDashboard from "./pages/admin/Dashboard";
 import Analytics from "./pages/admin/Analytics";
@@ -23,6 +29,7 @@ import Leads from "./pages/admin/Leads";
 import Automations from "./pages/admin/Automations";
 import Retention from "./pages/admin/Retention";
 import Settings from "./pages/admin/Settings";
+import HotmartProducts from "./pages/admin/HotmartProducts";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +45,33 @@ const App = () => (
             <Route path="/cursos" element={<Cursos />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/portal" element={<Portal />} />
+            
+            {/* Portal Routes - Protected */}
+            <Route path="/portal" element={
+              <ProtectedRoute>
+                <Portal />
+              </ProtectedRoute>
+            } />
+            <Route path="/portal/curso/:courseId" element={
+              <ProtectedRoute>
+                <CoursePage />
+              </ProtectedRoute>
+            } />
+            <Route path="/portal/curso/:courseId/aula/:lessonId" element={
+              <ProtectedRoute>
+                <LessonPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/portal/certificados" element={
+              <ProtectedRoute>
+                <Certificates />
+              </ProtectedRoute>
+            } />
+            <Route path="/portal/perfil" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
             
             {/* Admin Routes */}
             <Route path="/admin" element={
@@ -55,6 +88,7 @@ const App = () => (
               <Route path="automations" element={<Automations />} />
               <Route path="retention" element={<Retention />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="hotmart-products" element={<HotmartProducts />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />
