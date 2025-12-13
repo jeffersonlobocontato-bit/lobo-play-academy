@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { 
   ArrowLeft, 
@@ -41,6 +42,13 @@ export default function LessonPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Video progress tracking
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [watchProgress, setWatchProgress] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const lastSavedPositionRef = useRef(0);
+  const saveIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch current lesson
   const { data: lesson, isLoading: lessonLoading } = useQuery({
@@ -172,6 +180,98 @@ export default function LessonPage() {
     },
   });
 
+  // Save video progress to database
+  const saveProgress = useCallback(async (currentTime: number, duration: number) => {
+    if (!user || !lessonId || duration === 0) return;
+    
+    const progressPercent = (currentTime / duration) * 100;
+    const watchTimeIncrement = Math.floor(currentTime - lastSavedPositionRef.current);
+    
+    if (watchTimeIncrement < 5) return; // Only save if at least 5 seconds passed
+    
+    try {
+      if (lessonProgress) {
+        await supabase
+          .from('lesson_progress')
+          .update({
+            last_position_seconds: Math.floor(currentTime),
+            watch_time_seconds: (lessonProgress.watch_time_seconds || 0) + watchTimeIncrement,
+          })
+          .eq('id', lessonProgress.id);
+      } else {
+        await supabase
+          .from('lesson_progress')
+          .insert({
+            user_id: user.id,
+            lesson_id: lessonId,
+            last_position_seconds: Math.floor(currentTime),
+            watch_time_seconds: Math.floor(currentTime),
+          });
+        queryClient.invalidateQueries({ queryKey: ['lesson-progress', lessonId, user.id] });
+      }
+      lastSavedPositionRef.current = currentTime;
+    } catch (error) {
+      console.error('Error saving video progress:', error);
+    }
+  }, [user, lessonId, lessonProgress, queryClient]);
+
+  // Handle video time update
+  const handleTimeUpdate = useCallback(() => {
+    if (!videoRef.current) return;
+    const currentTime = videoRef.current.currentTime;
+    const duration = videoRef.current.duration;
+    if (duration > 0) {
+      setWatchProgress((currentTime / duration) * 100);
+    }
+  }, []);
+
+  // Handle video duration change
+  const handleDurationChange = useCallback(() => {
+    if (!videoRef.current) return;
+    setVideoDuration(videoRef.current.duration);
+  }, []);
+
+  // Handle video loaded - restore position
+  const handleLoadedMetadata = useCallback(() => {
+    if (!videoRef.current || !lessonProgress?.last_position_seconds) return;
+    const savedPosition = lessonProgress.last_position_seconds;
+    if (savedPosition > 0 && savedPosition < videoRef.current.duration - 5) {
+      videoRef.current.currentTime = savedPosition;
+      lastSavedPositionRef.current = savedPosition;
+    }
+  }, [lessonProgress?.last_position_seconds]);
+
+  // Auto-save progress every 30 seconds
+  useEffect(() => {
+    saveIntervalRef.current = setInterval(() => {
+      if (videoRef.current && !videoRef.current.paused) {
+        saveProgress(videoRef.current.currentTime, videoRef.current.duration);
+      }
+    }, 30000);
+
+    return () => {
+      if (saveIntervalRef.current) {
+        clearInterval(saveIntervalRef.current);
+      }
+    };
+  }, [saveProgress]);
+
+  // Save progress when leaving the page
+  useEffect(() => {
+    return () => {
+      if (videoRef.current) {
+        saveProgress(videoRef.current.currentTime, videoRef.current.duration);
+      }
+    };
+  }, [saveProgress]);
+
+  // Reset progress when lesson changes
+  useEffect(() => {
+    setWatchProgress(0);
+    setVideoDuration(0);
+    lastSavedPositionRef.current = 0;
+  }, [lessonId]);
+
   // Find prev/next lessons
   const currentIndex = allLessons?.findIndex((l) => l.id === lessonId) ?? -1;
   const prevLesson = currentIndex > 0 ? allLessons?.[currentIndex - 1] : null;
@@ -291,9 +391,17 @@ export default function LessonPage() {
             >
               <List className="w-5 h-5" />
             </Button>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <p className="text-xs text-muted-foreground">{module?.title}</p>
               <h1 className="font-heading font-bold line-clamp-1">{lesson.title}</h1>
+              {videoDuration > 0 && (
+                <div className="flex items-center gap-2 mt-1">
+                  <Progress value={watchProgress} className="h-1.5 flex-1 max-w-xs" />
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    {Math.round(watchProgress)}% assistido
+                  </span>
+                </div>
+              )}
             </div>
             <Button
               variant={isCompleted ? "outline" : "hero"}
@@ -324,7 +432,16 @@ export default function LessonPage() {
                   allowFullScreen
                 />
               ) : (
-                <video src={videoEmbed} controls className="w-full h-full" />
+                <video 
+                  ref={videoRef}
+                  src={videoEmbed} 
+                  controls 
+                  className="w-full h-full"
+                  onTimeUpdate={handleTimeUpdate}
+                  onDurationChange={handleDurationChange}
+                  onLoadedMetadata={handleLoadedMetadata}
+                  onPause={() => saveProgress(videoRef.current?.currentTime || 0, videoRef.current?.duration || 0)}
+                />
               )
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground">
