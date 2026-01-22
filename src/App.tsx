@@ -19,6 +19,13 @@ import LessonPage from "./pages/portal/LessonPage";
 import Certificates from "./pages/portal/Certificates";
 import Profile from "./pages/portal/Profile";
 
+// Funnel pages
+import LandingPage from "./pages/funnel/LandingPage";
+import ObrigadoPage from "./pages/funnel/ObrigadoPage";
+import CPLPage from "./pages/funnel/CPLPage";
+import VendasPage from "./pages/funnel/VendasPage";
+import SucessoPage from "./pages/funnel/SucessoPage";
+
 // Admin pages
 import AdminDashboard from "./pages/admin/Dashboard";
 import Analytics from "./pages/admin/Analytics";
@@ -45,6 +52,16 @@ const App = () => (
             <Route path="/cursos" element={<Cursos />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth" element={<Auth />} />
+            
+            {/* Funnel Routes - Public */}
+            <Route path="/lp" element={<LandingPage />} />
+            <Route path="/lp/:slug" element={<LandingPage />} />
+            <Route path="/obrigado" element={<ObrigadoPage />} />
+            <Route path="/cpl" element={<CPLPage />} />
+            <Route path="/cpl/:slug" element={<CPLPage />} />
+            <Route path="/vendas" element={<VendasPage />} />
+            <Route path="/vendas/:slug" element={<VendasPage />} />
+            <Route path="/sucesso" element={<SucessoPage />} />
             
             {/* Portal Routes - Protected */}
             <Route path="/portal" element={
