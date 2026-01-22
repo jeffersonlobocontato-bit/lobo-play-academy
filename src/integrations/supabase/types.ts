@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          action: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          ip_address: string | null
+          new_data: Json | null
+          old_data: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          ip_address?: string | null
+          new_data?: Json | null
+          old_data?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          ip_address?: string | null
+          new_data?: Json | null
+          old_data?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       automation_logs: {
         Row: {
           action_taken: string | null
@@ -88,6 +124,44 @@ export type Database = {
         }
         Relationships: []
       }
+      cart_windows: {
+        Row: {
+          close_at: string
+          created_at: string
+          funnel_id: string | null
+          id: string
+          is_active: boolean | null
+          name: string | null
+          open_at: string
+        }
+        Insert: {
+          close_at: string
+          created_at?: string
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string | null
+          open_at: string
+        }
+        Update: {
+          close_at?: string
+          created_at?: string
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string | null
+          open_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cart_windows_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses: {
         Row: {
           created_at: string
@@ -158,6 +232,125 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      entitlements: {
+        Row: {
+          course_id: string | null
+          granted_at: string
+          id: string
+          order_id: string | null
+          revoke_reason: string | null
+          revoked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          course_id?: string | null
+          granted_at?: string
+          id?: string
+          order_id?: string | null
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          course_id?: string | null
+          granted_at?: string
+          id?: string
+          order_id?: string | null
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entitlements_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entitlements_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnel_pages: {
+        Row: {
+          content: Json | null
+          created_at: string
+          funnel_id: string | null
+          id: string
+          is_active: boolean | null
+          page_type: string
+          slug: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          page_type: string
+          slug: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          page_type?: string
+          slug?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "funnel_pages_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnels: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          name: string
+          settings: Json | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          settings?: Json | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          settings?: Json | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       hotmart_products: {
         Row: {
@@ -256,6 +449,51 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      lead_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          funnel_id: string | null
+          id: string
+          lead_id: string | null
+          metadata: Json | null
+          page_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          funnel_id?: string | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          page_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          funnel_id?: string | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          page_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_events_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lead_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads: {
         Row: {
@@ -384,6 +622,122 @@ export type Database = {
           },
         ]
       }
+      message_queue: {
+        Row: {
+          attempts: number | null
+          body: string | null
+          channel: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          lead_id: string | null
+          scheduled_at: string
+          sent_at: string | null
+          status: string | null
+          subject: string | null
+          template_id: string | null
+          to_email: string
+          to_name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          attempts?: number | null
+          body?: string | null
+          channel?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          scheduled_at: string
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+          template_id?: string | null
+          to_email: string
+          to_name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          attempts?: number | null
+          body?: string | null
+          channel?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          scheduled_at?: string
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+          template_id?: string | null
+          to_email?: string
+          to_name?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_queue_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "message_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_templates: {
+        Row: {
+          body: string
+          channel: string | null
+          created_at: string
+          funnel_id: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          subject: string | null
+          trigger_type: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          channel?: string | null
+          created_at?: string
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          subject?: string | null
+          trigger_type: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          channel?: string | null
+          created_at?: string
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          subject?: string | null
+          trigger_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_templates_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       modules: {
         Row: {
           course_id: string
@@ -415,6 +769,135 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          course_id: string | null
+          created_at: string
+          description: string | null
+          funnel_id: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          original_price_cents: number | null
+          price_cents: number
+          stripe_price_id: string | null
+          stripe_product_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          course_id?: string | null
+          created_at?: string
+          description?: string | null
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          original_price_cents?: number | null
+          price_cents?: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string | null
+          created_at?: string
+          description?: string | null
+          funnel_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          original_price_cents?: number | null
+          price_cents?: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offers_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          currency: string | null
+          customer_email: string | null
+          customer_name: string | null
+          id: string
+          lead_id: string | null
+          metadata: Json | null
+          offer_id: string | null
+          paid_at: string | null
+          refunded_at: string | null
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          currency?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          offer_id?: string | null
+          paid_at?: string | null
+          refunded_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          offer_id?: string | null
+          paid_at?: string | null
+          refunded_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
             referencedColumns: ["id"]
           },
         ]
